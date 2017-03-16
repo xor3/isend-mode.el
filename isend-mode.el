@@ -221,6 +221,8 @@ the associated buffer using \\[isend-send] (or `isend-send').
 (defvar isend--command-buffer)
 (make-variable-buffer-local 'isend--command-buffer)
 
+(defvar-local isend-pop-to-buffer-after-send nil)
+
 ;;;###autoload
 (defun isend-associate (buffername)
  "Set the buffer to which commands will be sent using `isend-send'.
@@ -320,7 +322,9 @@ the region is active, all lines spanned by it are sent."
 (defun isend-display-buffer ()
   (interactive)
   (isend--check)
-  (display-buffer isend--command-buffer))
+  (if (or isend-pop-to-buffer-after-send (equal current-prefix-arg '(4)))
+      (pop-to-buffer isend--command-buffer)
+    (display-buffer isend--command-buffer)))
 
 
 ;; Helper functions
@@ -328,7 +332,7 @@ the region is active, all lines spanned by it are sent."
 (defun isend--check ()
   "Check whether the current buffer has been associated to a terminal."
   (when (not (boundp 'isend--command-buffer))
-    (error "No associated terminal buffer. You should run `isend-associate'")))
+    (call-interactively 'isend-associate)))
 
 (defun isend--region-seed ()
   "Return a 'seed' of the region to be sent.
@@ -355,18 +359,13 @@ The result is a cons cell of the form (beg . end)"
   "Return the boundaries of the region to be sent.
 The result is a cons cell of the form (beg . end)
 The region is expanded so that no line is only partially sent."
-  (let* ((bds (isend--region-seed))
-         (beg (car bds))
-         (end (cdr bds)))
-
-    ;; Expand the region to span whole lines
-    (goto-char beg)
-    (setq beg (line-beginning-position))
-    (goto-char end)
-    (setq end (line-end-position))
-    (when (= beg (point-max))
-      (error "Nothing more to send!"))
-    (cons beg end)))
+  (interactive)
+  (if (use-region-p)
+      (cons (region-beginning)
+            (region-end))
+    (cons (line-beginning-position)
+         (line-end-position)
+          )))
 
 (defun isend--next-line ()
   "Move point to the next line.
