@@ -235,7 +235,7 @@ This should usually be something like '*ansi-term*' or '*terminal*'."
 (defalias 'isend 'isend-associate)
 
 
-
+;;;###autoload
 (defun isend-send ()
  "Send the current line to a terminal.
 Use `isend-associate' to set the associated terminal buffer. If
@@ -304,6 +304,7 @@ the region is active, all lines spanned by it are sent."
  (when isend-forward-line
    (isend--next-line)))
 
+;;;###autoload
 (defun isend-send-string ()
  "Send the current line to a terminal.
 Use `isend-associate' to set the associated terminal buffer. If
@@ -394,7 +395,7 @@ the region is active, all lines spanned by it are sent."
 
 (defun isend--check ()
   "Check whether the current buffer has been associated to a terminal."
-  (when (not (boundp 'isend--command-buffer))
+  (when (or (not (boundp 'isend--command-buffer)) (eq isend--command-buffer nil))
     (call-interactively 'isend-associate)))
 
 (defun isend--region-seed ()
