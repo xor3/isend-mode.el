@@ -162,35 +162,35 @@ Possible values include:
 
 ;;;###autoload
 (defun isend-default-shell-setup ()
-  (when (eq major-mode 'sh-mode)
-    (set (make-local-variable 'isend-skip-empty-lines)     t)
-    (set (make-local-variable 'isend-strip-empty-lines)    nil)
-    (set (make-local-variable 'isend-delete-indentation)   nil)
-    (set (make-local-variable 'isend-end-with-empty-line)  nil)
-    (set (make-local-variable 'isend-send-line-function)   #'insert-buffer-substring)
-    (set (make-local-variable 'isend-send-region-function) #'insert-buffer-substring)))
+  (interactive)
+  (set (make-local-variable 'isend-skip-empty-lines)     t)
+  (set (make-local-variable 'isend-strip-empty-lines)    nil)
+  (set (make-local-variable 'isend-delete-indentation)   nil)
+  (set (make-local-variable 'isend-end-with-empty-line)  nil)
+  (set (make-local-variable 'isend-send-line-function)   #'insert-buffer-substring)
+  (set (make-local-variable 'isend-send-region-function) #'insert-buffer-substring))
 
 ;;;###autoload
 (defun isend-default-python-setup ()
-  (when (eq major-mode 'python-mode)
-    (set (make-local-variable 'isend-skip-empty-lines)     nil)
-    (set (make-local-variable 'isend-strip-empty-lines)    t)
-    (set (make-local-variable 'isend-delete-indentation)   t)
-    (set (make-local-variable 'isend-end-with-empty-line)  t)
-    (set (make-local-variable 'isend-send-line-function)   #'insert-buffer-substring)
-    (set (make-local-variable 'isend-send-region-function) #'insert-buffer-substring)
-    (set (make-local-variable 'isend-mark-defun-function)  #'isend--python-mark-defun)))
+  (interactive)
+  (set (make-local-variable 'isend-skip-empty-lines)     nil)
+  (set (make-local-variable 'isend-strip-empty-lines)    t)
+  (set (make-local-variable 'isend-delete-indentation)   t)
+  (set (make-local-variable 'isend-end-with-empty-line)  t)
+  (set (make-local-variable 'isend-send-line-function)   #'insert-buffer-substring)
+  (set (make-local-variable 'isend-send-region-function) #'insert-buffer-substring)
+  (set (make-local-variable 'isend-mark-defun-function)  #'isend--python-mark-defun))
 
 ;;;###autoload
 (defun isend-default-ipython-setup ()
-  (when (eq major-mode 'python-mode)
-    (set (make-local-variable 'isend-skip-empty-lines)     nil)
-    (set (make-local-variable 'isend-strip-empty-lines)    nil)
-    (set (make-local-variable 'isend-delete-indentation)   nil)
-    (set (make-local-variable 'isend-end-with-empty-line)  nil)
-    (set (make-local-variable 'isend-send-line-function)   #'insert-buffer-substring)
-    (set (make-local-variable 'isend-send-region-function) #'isend--ipython-cpaste)
-    (set (make-local-variable 'isend-mark-defun-function)  #'isend--python-mark-defun)))
+  (interactive)
+  (set (make-local-variable 'isend-skip-empty-lines)     nil)
+  (set (make-local-variable 'isend-strip-empty-lines)    nil)
+  (set (make-local-variable 'isend-delete-indentation)   nil)
+  (set (make-local-variable 'isend-end-with-empty-line)  nil)
+  (set (make-local-variable 'isend-send-line-function)   #'insert-buffer-substring)
+  (set (make-local-variable 'isend-send-region-function) #'isend--ipython-cpaste)
+  (set (make-local-variable 'isend-mark-defun-function)  #'isend--python-mark-defun))
 
 
 
@@ -445,7 +445,8 @@ Empty lines are skipped if `isend-skip-empty-lines' is non-nil."
   (insert "%cpaste\n")
   (insert-buffer-substring buf-name)
   (insert "\n--")
-  (term-send-input))
+  ;; (term-send-input)
+  )
 
 (defun isend--ipython-paste (buf-name)
   ""
